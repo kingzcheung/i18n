@@ -4,8 +4,8 @@
 package i18n
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"path"
 	"reflect"
@@ -19,7 +19,7 @@ var locales = &store{
 
 type locale struct {
 	language string
-	message  gjson.Result
+	message  map[string]string
 }
 
 func IsExist(lang string) bool {
@@ -65,6 +65,17 @@ func LoadPath(filepath string) error {
 	return nil
 }
 
+func LoadMap(m map[string]map[string]string) {
+	var lang string
+	for k, v := range m {
+		lang = k
+		locales.locales[lang] = &locale{
+			language: lang,
+			message:  v,
+		}
+	}
+}
+
 func Load(filePath string, langType ...string) error { return locales.Load(filePath, langType...) }
 func (s *store) Load(filePath string, langType ...string) error {
 	var lang string
@@ -76,13 +87,21 @@ func (s *store) Load(filePath string, langType ...string) error {
 			return fmt.Errorf("加载文件格式不对")
 		}
 	}
-	message, err := getMessageContent(filePath)
+	j, err := getJsonContent(filePath)
 	if err != nil {
 		return err
 	}
+
+	var message map[string]string
+
+	err = json.Unmarshal(j, &message)
+	if err != nil {
+		return err
+	}
+
 	locales.locales[lang] = &locale{
 		language: lang,
-		message:  gjson.Parse(message),
+		message:  message,
 	}
 
 	return nil
@@ -93,11 +112,9 @@ func (s *store) Get(lang, key string) (string, bool) {
 	if !ok {
 		return "", ok
 	}
-	res := locale.message.Get(key)
-	if res.Exists() {
-		return res.String(), ok
-	}
-	return "", false
+	res, ok := locale.message[key]
+
+	return res, ok
 }
 
 func getLangFromPath(filePath string) string {
@@ -109,12 +126,12 @@ func getLangFromPath(filePath string) string {
 	return ""
 }
 
-func getMessageContent(filePath string) (string, error) {
+func getJsonContent(filePath string) ([]byte, error) {
 	f, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return "", err
+		return []byte{}, err
 	}
-	return string(f), nil
+	return f, nil
 }
 
 type Locate struct {

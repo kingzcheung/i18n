@@ -78,3 +78,16 @@ func BenchmarkLang(b *testing.B) {
 
 	}
 }
+
+func TestLoadMap(t *testing.T) {
+	var locale = map[string]map[string]string{
+		"en": {
+			"key_already_exists": "KEY [%s] already exists",
+		},
+	}
+	var as = assert.New(t)
+	LoadMap(locale)
+	DefaultLanguage("en")
+	as.Equal(I("key_already_exists"), "KEY [%s] already exists")
+
+}
