@@ -18,3 +18,14 @@ func main() {
 	i18n.DefaultLanguage("en")
 	i18n.I("Africa") //output: Africa
 }
+
+func loadMap() {
+	i18n.LoadMap(map[string]map[string]string{
+		"en": {
+			"foo": "bar",
+		},
+		"zh-CN": {
+			"foo": "内容",
+		},
+	})
+}

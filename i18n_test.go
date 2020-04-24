@@ -88,6 +88,6 @@ func TestLoadMap(t *testing.T) {
 	var as = assert.New(t)
 	LoadMap(locale)
 	DefaultLanguage("en")
-	as.Equal(I("key_already_exists"), "KEY [%s] already exists")
+	as.Equal(I("key_already_exists", "bar"), "KEY [bar] already exists")
 
 }
