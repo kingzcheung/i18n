@@ -2,6 +2,7 @@ i18n
 ---
 [![Build Status](https://cloud.drone.io/api/badges/kingzcheung/i18n/status.svg)](https://cloud.drone.io/kingzcheung/i18n)
 [![GitHub license](https://img.shields.io/badge/license-Apache-blue.svg)](https://github.com/kingzcheung/i18n/blob/master/LICENSE)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue)](https://pkg.go.dev/github.com/kingzcheung/i18n?tab=overview)
 
 i18n 通过解析json实现国际化和本地化,也支持通过 `map[string]map[string][string]` 数据（通过工具生成）。
 
