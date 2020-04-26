@@ -1,5 +1,6 @@
 i18n 
 ---
+
 i18n 通过解析json实现国际化和本地化,也支持通过 `map[string]map[string][string]` 数据（通过工具生成）。
 
 ### 安装
