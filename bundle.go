@@ -16,8 +16,10 @@ package i18n
 
 import (
 	"fmt"
+	"github.com/kingzcheung/i18n/v3/testdata"
 	"github.com/kingzcheung/i18n/v3/typ"
 	"golang.org/x/text/language"
+	"io/fs"
 	"io/ioutil"
 	"path"
 	"strings"
@@ -61,6 +63,36 @@ func (b *Bundle) LoadMessageFromFile(filename string, umn typ.UnmarshalFunc) err
 	}
 
 	return b.LoadMessageFromBytes(rf, tag, umn)
+}
+
+func (b *Bundle) LoadMessageFromDir(dir string, umn typ.UnmarshalFunc) error {
+	infos, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+	for _, info := range infos {
+		err = b.LoadMessageFromFile(path.Join(dir, info.Name()), umn)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (b *Bundle) LoadMessageFromFsEntries(entries []fs.DirEntry, umn typ.UnmarshalFunc) error {
+	for _, entry := range entries {
+		data, err := testdata.TestDataFs.ReadFile(path.Join("lang", entry.Name()))
+		if err != nil {
+			return err
+		}
+		name := strings.Replace(entry.Name(), path.Ext(entry.Name()), "", 1)
+		err = b.LoadMessageFromBytes(data, language.Make(name), umn)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 //getTagFromFilepath 从文件中获取语言特征

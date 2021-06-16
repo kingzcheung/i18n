@@ -214,7 +214,7 @@ enforce_domain = true
 }
 
 func TestBundle_LoadMessageFromBytes_Yaml(t *testing.T) {
-	yamlText, err := testdata.TestDataFs.ReadFile("lang/en.yaml")
+	yamlText, err := testdata.TestDataFs.ReadFile("en.yaml")
 	assert.NoError(t, err)
 
 	type fields struct {

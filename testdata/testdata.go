@@ -16,5 +16,5 @@ package testdata
 
 import "embed"
 
-//go:embed lang
+//go:embed lang en.ini en.yaml deep
 var TestDataFs embed.FS

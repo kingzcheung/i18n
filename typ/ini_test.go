@@ -22,7 +22,7 @@ import (
 )
 
 func TestIni_Unmarshal(t *testing.T) {
-	iniBytes, err := testdata.TestDataFs.ReadFile("lang/en.ini")
+	iniBytes, err := testdata.TestDataFs.ReadFile("en.ini")
 	assert.NoError(t, err)
 	type args struct {
 		data []byte

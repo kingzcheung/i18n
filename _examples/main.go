@@ -42,7 +42,16 @@ func main() {
 		panic(err)
 	}
 
-	e := i18n.NewLocalization(bundle, "en")
+	// or
+	entrys, err := testdata.TestDataFs.ReadDir("lang")
+	if err != nil {
+		panic(err)
+	}
+	_ = bundle.LoadMessageFromFsEntries(entrys, func(bytes []byte, m *map[string]interface{}) error {
+		return json.Unmarshal(bytes, m)
+	})
+
+	e := i18n.NewLocalization(bundle, "zh-CN")
 
 	fmt.Println(e.Localize("Africa"))
 }

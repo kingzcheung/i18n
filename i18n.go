@@ -27,10 +27,10 @@ type Localization struct {
 func NewLocalization(bundle *Bundle, lang string, fallbackLangs ...string) *Localization {
 	l := &Localization{bundle: bundle}
 	tags := make([]language.Tag, len(fallbackLangs)+1)
-	tags = append(tags, language.Make(lang))
+	tags[0] = language.Make(lang)
 	if len(fallbackLangs) > 0 {
-		for _, fallbackLang := range fallbackLangs {
-			tags = append(tags, language.Make(fallbackLang))
+		for i, fallbackLang := range fallbackLangs {
+			tags[i+1] = language.Make(fallbackLang)
 		}
 	}
 	l.tags = tags
