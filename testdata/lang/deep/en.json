@@ -1,0 +1,26 @@
+{
+  "Antarctica": "Antarctica",
+  "Billing status": "Status",
+  "Branch Office": "Branch office",
+  "Card type": "Card type",
+  "Commission amount": "Commission amount",
+  "Commission rate": "Commission rate",
+  "Completed": "Completed",
+  "Corporate Distributor": "CD",
+  "Dealer": "Dealer",
+  "ID type require": "ID type is required.",
+  "ID type wrong": "Invalid ID type.",
+  "Kiosk": "Kisok",
+  "Oceania": "Oceania",
+  "Operation object information": "Object",
+  "Operator information": "User",
+  "Pending settlement": "To be setteled",
+  "Quantity": "Quantity",
+  "Querying": "Querying",
+  "area": {
+    "Africa": "Africa",
+    "Europe": "Europe",
+    "Asia": "Asia",
+    "NorthAmericanstate": "North America"
+  }
+}

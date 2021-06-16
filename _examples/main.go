@@ -15,31 +15,34 @@
 package main
 
 import (
-	"github.com/kingzcheung/i18n"
-	"log"
+	"encoding/json"
+	"fmt"
+	"github.com/kingzcheung/i18n/v3"
+	"github.com/kingzcheung/i18n/v3/testdata"
+	"golang.org/x/text/language"
 )
 
 func main() {
-	//lang
-	//├── en.json
-	//├── zh-CN.json
-	//└── zh-HK.json
-	filePath := "/your/project/lang"
-	err := i18n.LoadPath(filePath)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	i18n.DefaultLanguage("en")
-	i18n.I("Africa") //output: Africa
-}
 
-func loadMap() {
-	i18n.LoadMap(map[string]map[string]string{
-		"en": {
-			"foo": "bar",
-		},
-		"zh-CN": {
-			"foo": "内容",
-		},
+	bundle := i18n.NewBundle(language.English)
+	//err := bundle.LoadMessageFromFile("lang/en.json", func(bytes []byte, m *map[string]interface{}) error {
+	//	return json.Unmarshal(bytes,m)
+	//})
+	//if err != nil {
+	//	panic(err)
+	//}
+	data, err := testdata.TestDataFs.ReadFile("lang/en.json")
+	if err != nil {
+		panic(err)
+	}
+	err = bundle.LoadMessageFromBytes(data, language.English, func(bytes []byte, m *map[string]interface{}) error {
+		return json.Unmarshal(bytes, m)
 	})
+	if err != nil {
+		panic(err)
+	}
+
+	e := i18n.NewLocalization(bundle, "en")
+
+	fmt.Println(e.Localize("Africa"))
 }

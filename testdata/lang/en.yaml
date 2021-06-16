@@ -1,0 +1,10 @@
+name: steve
+clothing:
+  jacket: leather
+  trousers: denim
+  pants:
+    size: large
+age: 35
+eyes : brown
+beard: true
+money: 33.3
