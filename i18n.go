@@ -21,6 +21,7 @@ import (
 	"bytes"
 	"golang.org/x/text/language"
 	"html/template"
+	"net/http"
 	"strings"
 )
 
@@ -40,6 +41,11 @@ func NewLocalization(bundle *Bundle, lang string, fallbackLangs ...string) *Loca
 	}
 	l.tags = tags
 	return l
+}
+
+func (l *Localization) WithRequest(r *http.Request) *Localization {
+	accept := r.Header.Get("Accept-Language")
+	return l.With(accept)
 }
 
 func (l *Localization) With(lang string) *Localization {
