@@ -1,5 +1,5 @@
 {
-  "Africa": "Africa",
+  "Africa": "Africa, {{.welcome}}",
   "Antarctica": "Antarctica",
   "Asia": "Asia",
   "Billing status": "Status",

@@ -17,7 +17,12 @@
 
 package i18n
 
-import "golang.org/x/text/language"
+import (
+	"bytes"
+	"golang.org/x/text/language"
+	"html/template"
+	"strings"
+)
 
 type Localization struct {
 	bundle *Bundle
@@ -66,7 +71,34 @@ func (l *Localization) Localize(key string, variables ...map[string]interface{})
 		}
 	}
 
-	//TODO 解析变量
+	if strings.Index(value, "{{") > -1 {
+		value = l.parseTemplateValue(value, variables)
+	}
 
 	return value
+}
+
+func (l *Localization) parseTemplateValue(value string, variables []map[string]interface{}) string {
+	vars := mergeVars(variables)
+	bf := &bytes.Buffer{}
+	tmpl, err := template.New("").Parse(value)
+	if err != nil {
+		return value
+	}
+
+	err = tmpl.Execute(bf, vars)
+	if err != nil {
+		return value
+	}
+	return bf.String()
+}
+
+func mergeVars(variables []map[string]interface{}) map[string]interface{} {
+	var vars = make(map[string]interface{})
+	for _, variable := range variables {
+		for k, v := range variable {
+			vars[k] = v
+		}
+	}
+	return vars
 }

@@ -17,8 +17,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kingzcheung/i18n/v3"
-	"github.com/kingzcheung/i18n/v3/testdata"
+	"github.com/kingzcheung/i18n/v2"
+	"github.com/kingzcheung/i18n/v2/testdata"
 	"golang.org/x/text/language"
 )
 
@@ -43,15 +43,16 @@ func main() {
 	}
 
 	// or
-	entrys, err := testdata.TestDataFs.ReadDir("lang")
+	entries, err := testdata.TestDataFs.ReadDir("lang")
 	if err != nil {
 		panic(err)
 	}
-	_ = bundle.LoadMessageFromFsEntries(entrys, func(bytes []byte, m *map[string]interface{}) error {
+	_ = bundle.LoadMessageFromFsEntries(entries, func(bytes []byte, m *map[string]interface{}) error {
 		return json.Unmarshal(bytes, m)
 	})
 
 	e := i18n.NewLocalization(bundle, "zh-CN")
 
-	fmt.Println(e.Localize("Africa"))
+	fmt.Println(e.Localize("Antarctica"))
+	fmt.Println(e.Localize("Africa", map[string]interface{}{"welcome": "你好"}))
 }
