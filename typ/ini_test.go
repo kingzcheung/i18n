@@ -16,7 +16,7 @@ package typ
 
 import (
 	"fmt"
-	"github.com/kingzcheung/i18n/v3/testdata"
+	"github.com/kingzcheung/i18n/v2/testdata"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

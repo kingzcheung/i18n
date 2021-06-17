@@ -3,8 +3,8 @@ package i18n
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kingzcheung/i18n/v3/testdata"
-	"github.com/kingzcheung/i18n/v3/typ"
+	"github.com/kingzcheung/i18n/v2/testdata"
+	"github.com/kingzcheung/i18n/v2/typ"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/text/language"
 	"gopkg.in/yaml.v2"

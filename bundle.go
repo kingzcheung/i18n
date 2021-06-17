@@ -16,8 +16,8 @@ package i18n
 
 import (
 	"fmt"
-	"github.com/kingzcheung/i18n/v3/testdata"
-	"github.com/kingzcheung/i18n/v3/typ"
+	"github.com/kingzcheung/i18n/v2/testdata"
+	"github.com/kingzcheung/i18n/v2/typ"
 	"golang.org/x/text/language"
 	"io/fs"
 	"io/ioutil"

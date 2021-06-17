@@ -1,4 +1,4 @@
-module github.com/kingzcheung/i18n/v3
+module github.com/kingzcheung/i18n/v2
 
 go 1.16
 
