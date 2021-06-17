@@ -71,3 +71,66 @@ func TestLocalization_Localize(t *testing.T) {
 		})
 	}
 }
+
+func TestLocalization_With_Localize(t *testing.T) {
+	type fields struct {
+		bundle *Bundle
+		tags   []language.Tag
+	}
+	type args struct {
+		key       string
+		variables []map[string]interface{}
+		with      string
+	}
+	bundle := NewBundle(language.English)
+	entries, err := testdata.TestDataFs.ReadDir("lang")
+	assert.NoError(t, err)
+	err = bundle.LoadMessageFromFsEntries(entries, func(data []byte, m *map[string]interface{}) error {
+		return json.Unmarshal(data, m)
+	})
+	assert.NoError(t, err)
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   string
+	}{
+		{
+			name: "cn",
+			fields: fields{
+				bundle,
+				nil,
+			},
+			args: args{
+				key:       "Antarctica",
+				variables: nil,
+				with:      "zh-CN",
+			},
+			want: "南极洲",
+		},
+		{
+			name: "hk",
+			fields: fields{
+				bundle,
+				nil,
+			},
+			args: args{
+				key:       "Antarctica",
+				variables: nil,
+				with:      "zh-HK",
+			},
+			want: "南極洲",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			l := &Localization{
+				bundle: tt.fields.bundle,
+				tags:   tt.fields.tags,
+			}
+			if got := l.With(tt.args.with).Localize(tt.args.key, tt.args.variables...); got != tt.want {
+				t.Errorf("Localize() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

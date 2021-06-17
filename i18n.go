@@ -42,32 +42,49 @@ func NewLocalization(bundle *Bundle, lang string, fallbackLangs ...string) *Loca
 	return l
 }
 
+func (l *Localization) With(lang string) *Localization {
+	tag := language.Make(lang)
+	return l.WithTag(tag)
+}
+
+func (l *Localization) WithTag(tag language.Tag) *Localization {
+	tags := l.tags
+	if tags == nil {
+		l.tags = []language.Tag{tag}
+	} else {
+		l.tags = append([]language.Tag{tag}, tags...)
+	}
+	return l
+}
+
 func (l *Localization) Localize(key string, variables ...map[string]interface{}) string {
 	locales := l.bundle.Locales()
 	if len(locales) == 0 {
 		return key
 	}
-
 	var value string
-
-	for _, locale := range locales {
+LOCALE:
+	for _, tag := range l.tags {
 		var ok bool
-		for _, tag := range l.tags {
+		for _, locale := range locales {
 			if locale.tag.String() == tag.String() {
 				value, ok = locale.message[key]
 				if !ok {
 					continue
 				}
+				break LOCALE
 			}
 		}
-		if value == "" {
+	}
+	if value == "" {
+		var ok bool
+		for _, locale := range locales {
 			if locale.tag.String() == l.bundle.defaultLanguage.String() {
 				value, ok = locale.message[key]
 				if !ok {
-					value = key
+					continue
 				}
 			}
-
 		}
 	}
 

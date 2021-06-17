@@ -33,7 +33,7 @@ func Test_getTagFromFilepath(t *testing.T) {
 			args: args{
 				filepath: "zh-CN.json",
 			},
-			want: language.Chinese,
+			want: language.Make("zh-CN"),
 		},
 	}
 	for _, tt := range tests {

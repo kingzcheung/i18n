@@ -53,6 +53,8 @@ func main() {
 
 	e := i18n.NewLocalization(bundle, "zh-CN")
 
-	fmt.Println(e.Localize("Antarctica"))
-	fmt.Println(e.Localize("Africa", map[string]interface{}{"welcome": "你好"}))
+	fmt.Println(e.Localize("Antarctica"))                                      //南极洲
+	fmt.Println(e.Localize("Africa", map[string]interface{}{"welcome": "你好"})) //非洲,你好
+	fmt.Println(e.With("zh-HK").Localize("Asia"))                              //亞洲
+	fmt.Println(e.With("en").Localize("Asia"))
 }
