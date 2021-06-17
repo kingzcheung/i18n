@@ -31,16 +31,21 @@ type Localization struct {
 	currentTag   language.Tag
 }
 
-func NewLocalization(bundle *Bundle, lang string, fallbackLangs ...string) *Localization {
+func NewLocalization(bundle *Bundle, fallbackLangs ...string) *Localization {
 	l := &Localization{bundle: bundle}
-	tags := make([]language.Tag, len(fallbackLangs)+1)
 	if len(fallbackLangs) > 0 {
+		tags := make([]language.Tag, len(fallbackLangs)-1)
 		for i, fallbackLang := range fallbackLangs {
-			tags[i+1] = language.Make(fallbackLang)
+			fallbackTag := language.Make(fallbackLang)
+			if i == 0 {
+				l.currentTag = fallbackTag
+				continue
+			}
+			tags[i-1] = language.Make(fallbackLang)
 		}
+		l.fallbackTags = tags
 	}
-	l.currentTag = language.Make(lang)
-	l.fallbackTags = tags
+
 	return l
 }
 
