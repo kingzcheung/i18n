@@ -26,20 +26,21 @@ import (
 )
 
 type Localization struct {
-	bundle *Bundle
-	tags   []language.Tag
+	bundle       *Bundle
+	fallbackTags []language.Tag
+	currentTag   language.Tag
 }
 
 func NewLocalization(bundle *Bundle, lang string, fallbackLangs ...string) *Localization {
 	l := &Localization{bundle: bundle}
 	tags := make([]language.Tag, len(fallbackLangs)+1)
-	tags[0] = language.Make(lang)
 	if len(fallbackLangs) > 0 {
 		for i, fallbackLang := range fallbackLangs {
 			tags[i+1] = language.Make(fallbackLang)
 		}
 	}
-	l.tags = tags
+	l.currentTag = language.Make(lang)
+	l.fallbackTags = tags
 	return l
 }
 
@@ -54,12 +55,7 @@ func (l *Localization) With(lang string) *Localization {
 }
 
 func (l *Localization) WithTag(tag language.Tag) *Localization {
-	tags := l.tags
-	if tags == nil {
-		l.tags = []language.Tag{tag}
-	} else {
-		l.tags = append([]language.Tag{tag}, tags...)
-	}
+	l.currentTag = tag
 	return l
 }
 
@@ -69,19 +65,32 @@ func (l *Localization) Localize(key string, variables ...map[string]interface{})
 		return key
 	}
 	var value string
-LOCALE:
-	for _, tag := range l.tags {
-		var ok bool
-		for _, locale := range locales {
-			if locale.tag.String() == tag.String() {
-				value, ok = locale.message[key]
-				if !ok {
-					continue
+	var ok bool
+	for _, locale := range locales {
+		if locale.tag.String() == l.currentTag.String() {
+			value, ok = locale.message[key]
+			if !ok {
+				continue
+			}
+			break
+		}
+	}
+	if len(l.fallbackTags) > 0 {
+	LOCALE:
+		for _, tag := range l.fallbackTags {
+			var ok bool
+			for _, locale := range locales {
+				if locale.tag.String() == tag.String() {
+					value, ok = locale.message[key]
+					if !ok {
+						continue
+					}
+					break LOCALE
 				}
-				break LOCALE
 			}
 		}
 	}
+
 	if value == "" {
 		var ok bool
 		for _, locale := range locales {

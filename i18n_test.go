@@ -62,8 +62,8 @@ func TestLocalization_Localize(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			l := &Localization{
-				bundle: tt.fields.bundle,
-				tags:   tt.fields.tags,
+				bundle:       tt.fields.bundle,
+				fallbackTags: tt.fields.tags,
 			}
 			if got := l.Localize(tt.args.key, tt.args.variables...); got != tt.want {
 				t.Errorf("Localize() = %v, want %v", got, tt.want)
@@ -125,8 +125,8 @@ func TestLocalization_With_Localize(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			l := &Localization{
-				bundle: tt.fields.bundle,
-				tags:   tt.fields.tags,
+				bundle:       tt.fields.bundle,
+				fallbackTags: tt.fields.tags,
 			}
 			if got := l.With(tt.args.with).Localize(tt.args.key, tt.args.variables...); got != tt.want {
 				t.Errorf("Localize() = %v, want %v", got, tt.want)
